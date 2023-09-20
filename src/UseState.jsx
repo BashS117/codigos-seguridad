@@ -8,6 +8,8 @@ function UseState({ name }) {
         value:"",
         error: false,
         loading: false,
+        deleted: false,
+        confirmed: false,
 
 
     });
@@ -26,6 +28,7 @@ function UseState({ name }) {
                         ...estado,
                         error:false,
                         loading:false,
+                        confirmed:true,
 
                     });
                     // setError(true)
@@ -49,6 +52,7 @@ function UseState({ name }) {
         console.log("terminando efecto")
     },[estado.loading]);
 
+   if(!estado.deleted && !estado.confirmed){
     return (
         <div>
             <h2>Eliminar {name}</h2>
@@ -86,5 +90,55 @@ function UseState({ name }) {
             >Comprobar</button>
         </div>
     )
+   }else if(!!estado.confirmed && !estado.deleted){
+    return(
+        <React.Fragment>
+            <p>Pedimos confirmacion.¿estas seguro de eliminar?</p>
+            <button
+            onClick={()=>{
+               setEstado({
+                ...estado,
+                deleted:true,
+
+               });
+            }}>si, eliminar</button>
+            <button
+             onClick={()=>{
+                setEstado({
+                 ...estado,
+                 confirmed:false,
+                 value:'',
+ 
+                });
+             }}
+            >
+                no, me arrepenti
+                </button>
+
+        </React.Fragment>
+    );
+   }else{
+    return(
+        <React.Fragment>
+        <p>eliminado con exito</p>
+
+        <button
+             onClick={()=>{
+                setEstado({
+                 ...estado,
+                 confirmed:false,
+                 deleted:false,
+                 value: '',
+ 
+                });
+             }}
+            >
+                Resetear,volver atras
+                </button>
+
+        </React.Fragment>
+    )
+
+   }
 }
 export { UseState };
