@@ -3,14 +3,15 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import {UseState} from './UseState.jsx'
 import {ClassState} from './ClassState.jsx'
+import { UseReducer } from './UseReducer'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <div>
+        <UseReducer name='UseReducer'/>
         <UseState name="UseState"/>
         <ClassState name="Class State"/>
       </div>
