@@ -26,16 +26,46 @@ console.log(estado)
     // const [error, setError] = React.useState(false);
     // const [loading, setLoading] = React.useState(false);
 
+    
+    const onConfirm = ()=>{
+     dispatch({type: actionTypes.CONFIRM})
+    }
+
+    const onError =()=>[
+        
+       dispatch({type:actionTypes.ERROR})
+    ]
+    const onWrite=(event)=>{
+        
+       dispatch({type:actionTypes.WRITE, payload: event.target.value})
+    }
+    const onCheck=()=>{
+        
+       dispatch({type:actionTypes.CHECK})
+    }
+
+    const onDelete=()=>{
+        
+       dispatch({type:actionTypes.DELETE})
+    }
+
+
+    const onReset=()=>{
+       dispatch({type: actionTypes.RESET})
+    }
+
+
+
     React.useEffect(()=>{
         console.log("empezando efecto")
         if(!!estado.loading){
             setTimeout(()=>{
                 console.log("Haciendo la validacion")
                 if(estado.value === SECURITY_CODE){
-                  dispatch({type:'CONFIRM'})
+                    onConfirm();
                     // setError(true)
                 }else{
-                    dispatch({type:'ERROR'})
+                    onError();
 
                 }
                 
@@ -66,17 +96,17 @@ console.log(estado)
             placeholder="Codigo de seguridad" 
             value={estado.value}
 
-            onChange={(event)=>{
-                dispatch({type:'WRITE', payload:event.target.value});
-                // onWrite(event.target.value);
+            onChange={
+                // dispatch({type:actionTypes.WRITE, payload:event.target.value});
+                onWrite
                 // setValue(event.target.value);
 
-            }}
+            }
             />
             <button
-                onClick={() => {dispatch({type:'CHECK'})
-                            // setLoading(true)
-        }}
+                onClick={
+                    onCheck
+                  }
             >Comprobar</button>
         </div>
     )
@@ -85,13 +115,12 @@ console.log(estado)
         <React.Fragment>
             <p>Pedimos confirmacion.¿estas seguro de eliminar?</p>
             <button
-            onClick={()=>{
-                dispatch({type:'DELETE'})
-            }}>si, eliminar</button>
+            onClick={
+                onDelete
+            }>si, eliminar</button>
             <button
-             onClick={()=>{
-                dispatch({type:'RESET'})
-             }}
+             onClick={onReset
+             }
             >
                 no, me arrepenti
                 </button>
@@ -104,9 +133,9 @@ console.log(estado)
         <p>eliminado con exito</p>
 
         <button
-             onClick={()=>{
-                dispatch({type:'RESET'})
-             }}
+             onClick={
+                onReset
+             }
             >
                 Resetear,volver atras
                 </button>
@@ -172,37 +201,46 @@ console.log(estado)
     // }
 
 
+    const actionTypes ={
+        CONFIRM: 'CONFIRM',
+        ERROR: "ERROR",
+        WRITE: "WRITE",
+        CHECK: 'CHECK',
+        DELETE: 'DELETE',
+        RESET:'RESET'
+    }
+
     //REDUCER OBJECT
 
     const reducerObject=(estado, payload )=>({
-        'ERROR': {
+        [actionTypes.ERROR]: {
             ...estado,
             error: true,
             loading: false
         },
-        'CHECK': {
+        [actionTypes.CHECK]: {
             ...estado,
             loading: true,
         },
-        'CONFIRM':{
+        [actionTypes.CONFIRM]:{
             ...estado,
             error:false,
             loading:false,
             confirmed:true,
 
         },
-        'DELETE': {
+       [ actionTypes.DELETE]: {
             ...estado,
             deleted:true,
            },
-        'RESET':{
+        [actionTypes.RESET]:{
             ...estado,
             confirmed:false,
             deleted:false,
             value: '',
 
            },
-           'WRITE':{
+           [actionTypes.WRITE]:{
             ...estado,
              value: payload,
            }
